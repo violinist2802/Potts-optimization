@@ -1,0 +1,12 @@
+    "GN_CM":           {"distribution": "uniform", "min": 1,  "max": 1000},
+    "TARGETVOLUME_CM": {"distribution": "uniform", "min": 200,  "max": 400},
+    "INELASTICITY_CM": {"distribution": "uniform", "min": 1,  "max": 400},
+    "DETACH_CM":       {"distribution": "uniform", "min": 10,  "max": 300},
+    "GN_FB":           {"distribution": "uniform", "min": 1,  "max": 1000},
+    "TARGETVOLUME_FB": {"distribution": "uniform", "min": 200,  "max": 400},
+    "INELASTICITY_FB": {"distribution": "uniform", "min": 1,  "max": 400},
+    "DETACH_FB":       {"distribution": "uniform", "min": 5,  "max": 300},
+    "LMAX_CM":         {"distribution": "uniform", "min": 10,  "max": 150},
+    "LMAX_FB":         {"distribution": "uniform", "min": 10,  "max": 150},
+    "MAX_FOCALS_CM":   {"distribution": "int_uniform", "min": 4,"max": 30},
+    "MAX_FOCALS_FB":   {"distribution": "int_uniform", "min": 4,"max": 30}

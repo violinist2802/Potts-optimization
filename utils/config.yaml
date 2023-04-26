@@ -1,0 +1,92 @@
+neonatal_rat:
+  monolayer_on_fiber:
+    GN_CM: 461.36
+    TARGETVOLUME_CM: 96
+    INELASTICITY_CM: 26.42
+    DETACH_CM: 155.62
+    GN_FB: 233.76
+    TARGETVOLUME_FB: 56
+    INELASTICITY_FB: 14.24
+    DETACH_FB: 53.21
+    JCMMD: 2.342825
+    JFBMD: 1.400675
+    JCMCM: 1.57855
+    JFBFB: 0.668125
+    JFBCM: 2.880125
+    UNLEASH_CM: 117.94
+    UNLEASH_FB: 66.93
+    LMAX_CM: 24.948
+    LMAX_FB: 26.02
+    MAX_FOCALS_CM: 8
+    MAX_FOCALS_FB: 9
+    shifts: 1
+    distanceF: 0.010
+  
+  monolayer_without_fiber:
+    GN_CM: 51.03
+    TARGETVOLUME_CM: 140.8
+    INELASTICITY_CM: 62.32
+    DETACH_CM: 30.93
+    GN_FB: 5.09
+    TARGETVOLUME_FB: 126.4
+    INELASTICITY_FB: 17.91
+    DETACH_FB: 11.22
+    JCMMD: 2.534825
+    JFBMD: 1.114425
+    JCMCM: 1.996825
+    JFBFB: 1.1832
+    JFBCM: 2.37305
+    UNLEASH_CM: 0.0
+    UNLEASH_FB: 0.0
+    LMAX_CM: 32.564
+    LMAX_FB: 29.448
+    MAX_FOCALS_CM: 12
+    MAX_FOCALS_FB: 13
+    shifts: 1
+    distanceF: 20.0
+  
+  single_on_fiber:
+    GN_CM: 238.22
+    TARGETVOLUME_CM: 214.4
+    INELASTICITY_CM: 69.88
+    DETACH_CM: 16.16       
+    GN_FB: 9.62
+    TARGETVOLUME_FB: 148.8
+    INELASTICITY_FB: 68.05
+    DETACH_FB: 15.20        
+    JCMMD: 1.185475
+    JFBMD: 0.7645
+    JCMCM: 25.0
+    JFBFB: 25.0
+    JFBCM: 25.0
+    UNLEASH_CM: 28.15
+    UNLEASH_FB: 1.44
+    LMAX_CM: 16.924
+    LMAX_FB: 19.488  
+    MAX_FOCALS_CM: 10
+    MAX_FOCALS_FB: 22
+    shifts: 0
+    distanceF: 0.010
+  
+  single_without_fiber:
+    GN_CM: 47.48
+    TARGETVOLUME_CM: 337.6
+    INELASTICITY_CM: 151.37
+    DETACH_CM: 9.89
+    GN_FB: 26.81
+    TARGETVOLUME_FB: 222.4
+    INELASTICITY_FB: 70.71
+    DETACH_FB: 12.3
+    JCMMD: 1.06955
+    JFBMD: 0.7674
+    JCMCM: 25.0
+    JFBFB: 25.0
+    JFBCM: 25.0
+    UNLEASH_CM: 0.0
+    UNLEASH_FB: 0.0
+    LMAX_CM: 26.656
+    LMAX_FB: 30.68
+    MAX_FOCALS_CM: 21
+    MAX_FOCALS_FB: 24
+    shifts: 0
+    distanceF: 20.0
