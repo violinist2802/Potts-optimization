@@ -89,6 +89,11 @@ double JCMCMc;
 double JFBFBc;
 double JFBCMc;
 
+// Cross-layer coupling
+double JZ_CMCM;
+double JZ_FBFB;
+double JZ_CMFB;
+
 double UNLEASH_CM;
 double UNLEASH_FB;
 
