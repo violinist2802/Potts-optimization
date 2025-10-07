@@ -7,6 +7,7 @@ int cpmfem(
 	double PART,
 	double VOXSIZE,
 	int NVX, int NVY,
+	int NL,
 	double GN_CM,
 	double GN_FB,
 	double TARGETVOLUME_CM,
@@ -20,6 +21,9 @@ int cpmfem(
 	double JCMCM,
 	double JFBFB,
 	double JFBCM,
+	double JZ_CMCM,
+	double JZ_FBFB,
+	double JZ_CMFB,
 	double UNLEASH_CM,
 	double UNLEASH_FB,
 	double LMAX_CM,
@@ -32,7 +36,8 @@ int cpmfem(
 	char* typ,
 	int* cont_m,
 	int* fibr,
-	int* ctag_m
+	int* ctag_m,
+	float* PART_matrix
 );
 
 #endif

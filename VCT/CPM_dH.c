@@ -61,13 +61,17 @@ double calcdHdist(VOX* pv, CM* CMs, int xt, int xs, int ttag, int NVX)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-double calcdH(VOX* pv, FIBERS* pf, CM* CMs, int* csize, int xt, int xs, int pick, int ttag, int stag, double TARGETVOLUME_CM, double TARGETVOLUME_FB, double INELASTICITY_CM, double INELASTICITY_FB, double LMAX_CM, double LMAX_FB, double GN_CM, double GN_FB, double UNLEASH_CM, double UNLEASH_FB, double DETACH_CM, double DETACH_FB, double VOXSIZE, int NVX, double JCMCM, double JCMMD, double JFBFB, double JFBMD,  double JFBCM)
+double calcdH(VOX* pv, FIBERS* pf, CM* CMs, int* csize, int xt, int xs, int pick, int ttag, int stag, double TARGETVOLUME_CM, double TARGETVOLUME_FB, double INELASTICITY_CM, double INELASTICITY_FB, double LMAX_CM, double LMAX_FB, double GN_CM, double GN_FB, double UNLEASH_CM, double UNLEASH_FB, double DETACH_CM, double DETACH_FB, double VOXSIZE, int NVX, int NVY, int NL, double JCMCM, double JCMMD, double JFBFB, double JFBMD,  double JFBCM, double JZ_CMCM, double JZ_FBFB, double JZ_CMFB)
 {
-	double dH, dHcontact, dHvol, dHfocals, dHsyncytium, dHnuclei;
+	double dH, dHcontact, dHvol, dHfocals, dHsyncytium, dHnuclei, dHcrosslayer;
 	int ctag;
 
 	dHcontact = 0;
 	dHcontact = calcdHcontact(pv,xt,xs,ttag,stag, NVX, JCMCM, JCMMD, JFBFB, JFBMD, JFBCM);
+
+	dHcrosslayer = 0;
+	if(NL > 1)
+		dHcrosslayer = calcdHcrosslayer(pv,xt,xs,ttag,stag, NVX, NVY, NL, JZ_CMCM, JZ_FBFB, JZ_CMFB);
 
 	dHvol = 0;
 	dHvol = calcdHvol(csize,ttag,stag,pv[xt].type,pv[xs].type,TARGETVOLUME_CM, TARGETVOLUME_FB, INELASTICITY_CM, INELASTICITY_FB);
@@ -82,7 +86,7 @@ double calcdH(VOX* pv, FIBERS* pf, CM* CMs, int* csize, int xt, int xs, int pick
 	dHnuclei = 0;
 	dHnuclei = calcdHnuclei(pv, CMs, xt, ttag, stag, DETACH_CM, DETACH_FB, VOXSIZE, NVX);
 
-	dH = dHcontact + dHvol + dHfocals + dHsyncytium + dHnuclei;
+	dH = dHcontact + dHvol + dHfocals + dHsyncytium + dHnuclei + dHcrosslayer;
 	return dH;
 
 }
@@ -188,6 +192,74 @@ double calcdHcontact(VOX* pv, int xt, int xs, int ttag, int stag, int NVX, doubl
 	dHcontact = Hcontactn-Hcontact;
 
 	return dHcontact;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+double calcdHcrosslayer(VOX* pv, int xt, int xs, int ttag, int stag, int NVX, int NVY, int NL, double JZ_CMCM, double JZ_FBFB, double JZ_CMFB)
+{
+	double dHcrosslayer = 0;
+	int xtx, xty, xsx, xsy;
+	int layer_xt, layer_xs;
+	int z_neighbor_xt, z_neighbor_xs;
+	int nbs_z[2]; // z-direction neighbors (above and below)
+	
+	xtx = xt % NVX; xty = xt / NVX;
+	xsx = xs % NVX; xsy = xs / NVX;
+	
+	// Calculate which layer we're in (assuming layers are stacked in z)
+	layer_xt = xty / NVY;
+	layer_xs = xsy / NVY;
+	
+	// Check z-direction neighbors (layers above and below)
+	if(layer_xt > 0) {
+		z_neighbor_xt = xt - NVX * NVY; // voxel in layer below
+		if(z_neighbor_xt >= 0) {
+			dHcrosslayer += crosslayerenergy(ttag, pv[z_neighbor_xt].ctag, pv[xt].type, pv[z_neighbor_xt].type, JZ_CMCM, JZ_FBFB, JZ_CMFB);
+		}
+	}
+	if(layer_xt < NL-1) {
+		z_neighbor_xt = xt + NVX * NVY; // voxel in layer above
+		if(z_neighbor_xt < NVX * NVY * NL) {
+			dHcrosslayer += crosslayerenergy(ttag, pv[z_neighbor_xt].ctag, pv[xt].type, pv[z_neighbor_xt].type, JZ_CMCM, JZ_FBFB, JZ_CMFB);
+		}
+	}
+	
+	if(layer_xs > 0) {
+		z_neighbor_xs = xs - NVX * NVY; // voxel in layer below
+		if(z_neighbor_xs >= 0) {
+			dHcrosslayer -= crosslayerenergy(stag, pv[z_neighbor_xs].ctag, pv[xs].type, pv[z_neighbor_xs].type, JZ_CMCM, JZ_FBFB, JZ_CMFB);
+		}
+	}
+	if(layer_xs < NL-1) {
+		z_neighbor_xs = xs + NVX * NVY; // voxel in layer above
+		if(z_neighbor_xs < NVX * NVY * NL) {
+			dHcrosslayer -= crosslayerenergy(stag, pv[z_neighbor_xs].ctag, pv[xs].type, pv[z_neighbor_xs].type, JZ_CMCM, JZ_FBFB, JZ_CMFB);
+		}
+	}
+	
+	return dHcrosslayer;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+double crosslayerenergy(int tag1, int tag2, int type1, int type2, double JZ_CMCM, double JZ_FBFB, double JZ_CMFB)
+{
+	double J;
+	
+	J = 0;
+	if(tag1 != tag2) {
+		if((tag1 == 0) || (tag2 == 0)) {
+			// Cross-layer interaction with medium - use reduced coupling
+			J = 0.1 * (type1 == 1 ? JZ_CMCM : JZ_FBFB);
+		} else {
+			if(type1 == type2) {
+				J = (type1 == 1 ? JZ_CMCM : JZ_FBFB);
+			} else {
+				J = JZ_CMFB;
+			}
+		}
+	}
+	
+	return J;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
